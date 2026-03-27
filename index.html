@@ -4,170 +4,182 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>धाराशिव बुलेटिन - ताज्या बातम्या</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Marathi:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Marathi:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --primary-red: #d32f2f;
-            --dharashiv-blue: #1a237e; 
-            --whatsapp-blue: #00a8e8;
-            --bg-light: #ffffff;
-            --text-dark: #212121;
-            --transition: all 0.3s ease;
+        :root { 
+            --brand-yellow: #ffcc00; 
+            --brand-red: #d32f2f; 
+            --brand-green: #004d00; 
+            --wa-green: #25D366; 
+            --yt-red: #FF0000;
+        }
+        body { font-family: 'Noto Sans Marathi', sans-serif; margin: 0; background: #f4f4f4; color: #1a1a1a; }
+
+        /* १. टॉप बार (वेळ आणि तारीख) */
+        .top-bar { background: var(--brand-yellow); padding: 12px 10px; text-align: center; font-weight: bold; border-bottom: 2px solid #e6b800; }
+        .date-text { font-size: 14px; margin-bottom: 5px; color: #333; }
+        .clock-box { background: #000; color: #fff; padding: 4px 12px; border-radius: 4px; display: inline-block; font-family: monospace; font-size: 18px; }
+
+        /* २. चॅनेलचे नाव आणि सबस्क्राईब */
+        .header-main { background: #fff; padding: 25px 15px; text-align: center; border-bottom: 1px solid #eee; }
+        .channel-name { font-size: 34px; color: var(--brand-red); font-weight: bold; margin: 0; letter-spacing: 1px; }
+        .sub-tagline { font-size: 14px; color: #555; margin: 5px 0 15px; }
+        
+        .btn-yt {
+            background: var(--yt-red); color: #fff; padding: 10px 22px; border-radius: 50px;
+            text-decoration: none; font-weight: bold; display: inline-flex; align-items: center;
+            gap: 8px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.25); font-size: 14px;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Noto Sans Marathi', sans-serif; }
-        body { background: var(--bg-light); color: var(--text-dark); padding-bottom: 80px; }
+        /* ३. मेनू */
+        .menu-container { background: #fff; text-align: center; padding: 10px 0; border-bottom: 1px solid #ddd; }
+        .menu-icon { border: 1.5px solid #333; width: 40px; padding: 8px; margin: 0 auto; cursor: pointer; border-radius: 6px; background: #fff; }
+        .menu-line { height: 3px; background: #333; margin: 4px 0; border-radius: 2px; }
+        #category-menu { display: none; background: #fff; list-style: none; padding: 0; margin: 0; text-align: left; }
+        #category-menu li { padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        #category-menu li a { text-decoration: none; color: #333; font-weight: bold; font-size: 16px; display: block; }
 
-        /* Breaking News Ticker */
-        .ticker { background: #000; color:#fff; display:flex; align-items:center; height:45px; overflow:hidden; position: fixed; top: 0; z-index: 1001; width: 100%; border-bottom: 2px solid var(--primary-red); }
-        .ticker-label { background: var(--primary-red); padding:0 15px; font-weight:700; height: 100%; display: flex; align-items: center; white-space: nowrap; font-size: 14px; z-index: 1002; }
-        .ticker-text { white-space: nowrap; animation: marquee 30s linear infinite; padding-left: 20px; font-size: 15px; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-200%); } }
+        /* ४. ब्रेकिंग न्यूज */
+        .breaking-label { background: var(--brand-red); color: #fff; padding: 10px; font-weight: bold; text-align: center; font-size: 18px; }
+        .ticker-wrap { overflow: hidden; background: #fff; white-space: nowrap; padding: 15px; border-bottom: 1px solid #eee; }
+        .ticker-move { display: inline-block; animation: marquee 25s linear infinite; font-weight: bold; font-size: 17px; color: #d32f2f; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* Header Area */
-        .header { background: #fff; text-align:center; padding: 75px 20px 20px 20px; border-bottom: 1px solid #eee; margin-top: 45px; }
-        .header h1 { font-size: 2.8rem; color: var(--dharashiv-blue); font-weight: 800; margin-bottom: 5px; }
-        .header p { color: #666; font-weight: 600; letter-spacing: 1px; }
+        /* ५. बातम्यांचे ग्रिड आणि व्हिडिओ */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; padding: 15px; }
+        .news-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); border-top: 5px solid var(--brand-green); position: relative; }
+        
+        .media-container { width: 100%; height: 215px; background: #000; overflow: hidden; }
+        .media-container img { width: 100%; height: 100%; object-fit: cover; }
+        .media-container iframe { width: 100%; height: 100%; border: none; }
+        
+        .video-badge { position: absolute; top: 12px; right: 12px; background: var(--brand-red); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; z-index: 5; }
 
-        /* Sticky Navigation */
-        .nav-wrapper { position: sticky; top: 45px; z-index: 1000; background: #fff; padding: 10px 0; border-bottom: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .search-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; }
-        .search input { padding: 12px 20px; width: 100%; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; background: #f9f9f9; outline: none; }
-        .search input:focus { border-color: var(--primary-red); }
+        .news-info { padding: 18px; }
+        .news-info h3 { margin: 0; font-size: 19px; line-height: 1.5; color: #111; font-weight: 700; }
+        
+        .share-btn { background: var(--wa-green); color: #fff; text-align: center; padding: 14px; text-decoration: none; display: block; font-weight: bold; font-size: 16px; }
 
-        /* Category Menu */
-        .category-container { display: flex; overflow-x: auto; gap: 8px; margin-top: 12px; padding-bottom: 5px; scrollbar-width: none; }
-        .category-container::-webkit-scrollbar { display: none; }
-        .category-btn { background: #fff; color: #333; border: 1px solid #eee; padding: 8px 20px; white-space: nowrap; cursor: pointer; font-weight: 600; font-size: 14px; transition: var(--transition); border-radius: 4px; }
-        .category-btn:hover, .category-btn.active { background: #f8f9fa; border-bottom: 3px solid var(--primary-red); color: var(--primary-red); }
-
-        /* News Cards */
-        .container { padding: 20px 15px; max-width: 1100px; margin: auto; }
-        .news-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:25px; }
-        .news-card { background:#fff; border-bottom: 1px solid #eee; overflow:hidden; transition: var(--transition); display: flex; flex-direction: column; padding-bottom: 15px; }
-        .news-card img { width:100%; height:210px; object-fit:cover; border-radius: 6px; }
-        .news-body { padding: 15px 5px; }
-        .news-title { font-weight: 700; font-size: 1.2rem; line-height: 1.6; color: #111; text-decoration: none; display: block; }
-        .news-title:hover { color: var(--primary-red); }
-        .news-meta { font-size: 13px; color: #d32f2f; margin-bottom: 8px; font-weight: 700; display: block; }
-
-        /* WhatsApp Sticky Bar - Matches Screen 1 */
-        .wa-sticky-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; 
-            background: #e1f5fe; 
-            border-top: 2px solid var(--whatsapp-blue);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 20px; z-index: 2000; box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
-            text-decoration: none;
-        }
-        .wa-content { display: flex; align-items: center; gap: 15px; }
-        .wa-icon { background: #25D366; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; }
-        .wa-text { color: #01579b; font-weight: 800; font-size: 16px; line-height: 1.3; }
-
-        /* Dark Mode */
-        .dark { background: #121212; color: #e0e0e0; }
-        .dark .nav-wrapper, .dark .header, .dark .news-card { background: #121212; border-color: #333; }
-        .dark .news-title { color: #fff; }
-        .dark .search input { background: #222; color: #fff; border-color: #444; }
-        .dark .category-btn { background: #1e1e1e; color: #bbb; border-color: #333; }
-        .dark .wa-sticky-bar { background: #001a2e; }
-        .dark .wa-text { color: #81d4fa; }
-
-        .dark-toggle { position:fixed; bottom:90px; right:20px; background:#000; color:#fff; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:99; font-size: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        /* ६. फुटर (डेव्हलपर नाव) */
+        .footer { background: #222; color: #fff; text-align: center; padding: 25px; margin-top: 40px; font-size: 14px; border-top: 4px solid var(--brand-yellow); }
+        .dev-name { color: var(--brand-yellow); text-decoration: none; font-weight: bold; font-size: 15px; }
     </style>
 </head>
 <body>
 
-<div class="ticker">
-    <span class="ticker-label">ब्रेकिंग न्यूज</span>
-    <div class="ticker-text" id="breaking-ticker">धाराशिव बुलेटिनमध्ये आपले स्वागत आहे... ताज्या बातम्या लोड होत आहेत...</div>
+<div class="top-bar">
+    <div class="date-text" id="live-date">...</div>
+    <div class="clock-box" id="live-clock">00:00:00</div>
 </div>
 
-<div class="header">
-    <h1>धाराशिव बुलेटिन</h1>
-    <p>स्पंदन जनाचे | धाराशिव जिल्ह्याचे विश्वसनीय न्यूज पोर्टल</p>
+<div class="header-main">
+    <div class="channel-name">धाराशिव बुलेटिन</div>
+    <div class="sub-tagline">स्पंदन जनाचे | विश्वसनीय मराठी बातम्या</div>
+    
+    <a href="https://www.youtube.com/@DharashivBulletin?sub_confirmation=1" target="_blank" class="btn-yt">
+        🔴 YouTube वर सबस्क्राईब करा
+    </a>
 </div>
 
-<div class="nav-wrapper">
-    <div class="search-container">
-        <div class="search">
-            <input type="text" id="newsSearch" placeholder="येथे बातमी शोधा...">
-        </div>
-        <div class="category-container" id="category-filter">
-            <button class="category-btn active" data-category="all">मुख्य बातमी</button>
-            <button class="category-btn" data-category="ताज्या">ताज्या बातम्या</button>
-            <button class="category-btn" data-category="विशेष">विशेष बातम्या</button>
-            <button class="category-btn" data-category="शहर">धाराशिव शहर</button>
-            <button class="category-btn" data-category="जिल्हा">धाराशिव जिल्हा</button>
-            <button class="category-btn" data-category="महाराष्ट्र">महाराष्ट्र</button>
-        </div>
+<div class="menu-container">
+    <div class="menu-icon" onclick="toggleMenu()">
+        <div class="menu-line"></div><div class="menu-line" style="width:22px"></div><div class="menu-line"></div>
     </div>
+    <ul id="category-menu">
+        <li><a href="#">🏠 मुख्य पान (Home)</a></li>
+        <li><a href="#">⚖️ राजकारण (Politics)</a></li>
+        <li><a href="#">🚔 गुन्हेगारी (Crime)</a></li>
+        <li><a href="#">🎓 शिक्षण (Education)</a></li>
+        <li><a href="#">🌾 शेती (Agriculture)</a></li>
+    </ul>
 </div>
 
-<div class="container">
-    <div class="news-grid" id="news-container">
-        </div>
+<div class="breaking-label">ब्रेकिंग न्यूज 📢</div>
+<div class="ticker-wrap"><div class="ticker-move" id="ticker-content">ताज्या घडामोडी लोड होत आहेत...</div></div>
+
+<div id="news-container" class="news-grid">
+    <p style="text-align:center; padding:50px; grid-column: 1/-1;">बातम्या लोड होत आहेत, कृपया थांबा...</p>
 </div>
 
-<a href="https://whatsapp.com/channel/0029Vb7hTj0Fy72AquUjsq2s target="_blank">
-    <div class="wa-content">
-        <div class="wa-icon"><i class="fab fa-whatsapp"></i></div>
-        <div class="wa-text">व्हॉट्सॲपवर अपडेट्स मिळवण्यासाठी<br>येथे क्लिक करा</div>
-    </div>
-    <i class="fas fa-chevron-right" style="color: #01579b; font-size: 20px;"></i>
-</a>
-
-<div class="dark-toggle" onclick="toggleDark()">🌙</div>
+<div class="footer">
+    <p>© 2026 <b>धाराशिव बुलेटिन</b> | सर्व हक्क राखीव</p>
+    <p style="margin-top:10px; opacity:0.8;">Developed by: <span class="dev-name">V. B. Jagdale</span></p>
+</div>
 
 <script>
-const BLOG_URL = `https://dharashivbulletin.blogspot.com/feeds/posts/default?alt=json-in-script&callback=renderBloggerData&max-results=15`;
+    // १. मेनू उघडणे आणि बंद करणे
+    function toggleMenu() {
+        const m = document.getElementById('category-menu');
+        m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+    }
 
-function loadData() {
-    const script = document.createElement('script');
-    script.src = BLOG_URL;
-    document.body.appendChild(script);
-}
+    // २. लाईव्ह घड्याळ आणि मराठी तारीख
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('live-date').innerText = now.toLocaleDateString('mr-IN', options);
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-GB');
+    }
+    setInterval(updateClock, 1000); updateClock();
 
-function renderBloggerData(data) {
-    const container = document.getElementById("news-container");
-    const ticker = document.getElementById("breaking-ticker");
-    const posts = data.feed.entry;
-    
-    let tickerContent = "";
-    container.innerHTML = "";
+    // ३. ब्लॉगर कडून बातम्या आणणे
+    const BLOG_URL = "https://dharashivbulletin.blogspot.com/feeds/posts/default?alt=json-in-script&callback=renderData";
+    function fetchNews() {
+        const oldScript = document.getElementById('news-script');
+        if (oldScript) oldScript.remove();
+        const s = document.createElement("script");
+        s.id = 'news-script';
+        s.src = BLOG_URL;
+        document.body.appendChild(s);
+    }
 
-    posts.forEach(post => {
-        const title = post.title.$t;
-        const link = post.link.find(l => l.rel === 'alternate').href;
-        const date = new Date(post.published.$t).toLocaleDateString('mr-IN', { day:'numeric', month:'long', year:'numeric'});
-        let img = post.media$thumbnail ? post.media$thumbnail.url.replace("s72-c", "s1600") : "https://via.placeholder.com/400x250?text=Dharashiv+Bulletin";
+    function renderData(json) {
+        const entries = json.feed.entry;
+        if (!entries) return;
 
-        tickerContent += title + " • ";
+        // ब्रेकिंग न्यूज टिकर अपडेट
+        let tickerText = "";
+        entries.slice(0, 5).forEach(e => { tickerText += "  •  " + e.title.$t + "  "; });
+        document.getElementById('ticker-content').innerText = tickerText;
 
-        container.innerHTML += `
+        // बातम्यांचे कार्ड्स बनवणे
+        let html = "";
+        entries.forEach(post => {
+            const title = post.title.$t;
+            const link = post.link.find(l => l.rel === "alternate").href;
+            const content = post.content ? post.content.$t : "";
+
+            // YouTube व्हिडिओ शोधणे
+            let videoId = "";
+            const ytMatch = content.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+            if (ytMatch) videoId = ytMatch[1];
+
+            let mediaHtml = "";
+            if (videoId) {
+                mediaHtml = `<div class="media-container"><span class="video-badge">VIDEO 🎥</span><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>`;
+            } else {
+                let img = post.media$thumbnail ? post.media$thumbnail.url.replace("s72-c", "s1600") : "https://via.placeholder.com/400x250/d32f2f/ffffff?text=Dharashiv+Bulletin";
+                mediaHtml = `<div class="media-container"><img src="${img}" alt="News Image"></div>`;
+            }
+
+            html += `
             <div class="news-card">
-                <a href="${link}" target="_blank" style="text-decoration:none;">
-                    <img src="${img}" alt="News">
-                    <div class="news-body">
-                        <span class="news-meta">धाराशिव बुलेटिन | ${date}</span>
-                        <div class="news-title">${title}</div>
-                    </div>
+                ${mediaHtml}
+                <a href="${link}" target="_blank" style="text-decoration:none; color:inherit;">
+                    <div class="news-info"><h3>${title}</h3></div>
                 </a>
-            </div>
-        `;
-    });
-    ticker.innerText = tickerContent;
-}
+                <a class="share-btn" href="https://wa.me/?text=${encodeURIComponent('🚨 ' + title + '\n\nवाचा सविस्तर बातमी: ' + link)}" target="_blank">
+                    WhatsApp वर शेअर
+                </a>
+            </div>`;
+        });
+        document.getElementById('news-container').innerHTML = html;
+    }
 
-function toggleDark(){
-    document.body.classList.toggle("dark");
-    const isDark = document.body.classList.contains("dark");
-    document.querySelector(".dark-toggle").innerHTML = isDark ? "☀️" : "🌙";
-}
-
-window.onload = loadData;
+    // ऑटो रिफ्रेश दर ६० सेकंदांनी
+    fetchNews();
+    setInterval(fetchNews, 60000);
 </script>
 
 </body>
