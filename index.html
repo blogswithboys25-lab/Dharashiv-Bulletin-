@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="mr">
 <head>
@@ -6,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>धाराशिव बुलेटिन - स्पंदन जनतेचे</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Marathi:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6115119511519565" crossorigin="anonymous"></script>
 
     <style>
         :root { 
@@ -155,7 +157,7 @@
     }
     setInterval(updateClock, 1000); updateClock();
 
-    // २. व्हिजिटर काऊंट (Visitor Counter)
+    // २. व्हिजिटर काऊंट
     function updateVisitorCount() {
         fetch('https://api.counterapi.dev/v1/dharashiv-bulletin/visits/up')
             .then(res => res.json())
@@ -216,7 +218,6 @@
             const content = post.content ? post.content.$t : (post.summary ? post.summary.$t : "");
             const pubDate = new Date(post.published.$t).toLocaleDateString('mr-IN', { day:'numeric', month:'short', year:'numeric' });
 
-            // YouTube Video Check
             let videoId = "";
             const ytMatch = content.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
             if (ytMatch) videoId = ytMatch[1];
