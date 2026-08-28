@@ -1,1 +1,319 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>धाराशिव बुलेटिन - स्पंदन जनतेचे</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Marathi:wght@400;600;700&display=swap" rel="stylesheet">
 
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6115119511519503" crossorigin="anonymous"></script>
+    
+
+    <style>
+        :root { 
+            --brand-yellow: #ffcc00; 
+            --brand-red: #d32f2f; 
+            --brand-blue: #0d6efd;
+            --wa-green: #25D366; 
+            --yt-red: #FF0000;
+            --bg-gray: #f8f9fa;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Noto Sans Marathi', sans-serif; margin: 0; background: var(--bg-gray); color: #212529; }
+
+        /* १. टॉप बार */
+        .top-bar { background: var(--brand-yellow); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; border-bottom: 2px solid #e6b800; font-size: 13px; }
+        .top-right { display: flex; gap: 8px; align-items: center; }
+        .visitor-badge { background: #fff; padding: 2px 8px; border-radius: 4px; font-weight: bold; color: #111; font-size: 12px; }
+        .clock-box { background: #000; color: #fff; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+
+        /* २. हेडर */
+        .header-main { background: #fff; padding: 20px 15px; text-align: center; border-bottom: 1px solid #eee; }
+        .channel-name { font-size: 32px; color: var(--brand-red); font-weight: 700; margin: 0; }
+        .sub-tagline { font-size: 13px; color: #666; margin: 4px 0 12px; }
+        .header-actions { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .btn-yt { background: var(--yt-red); color: #fff; padding: 8px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; box-shadow: 0 3px 10px rgba(255,0,0,0.2); }
+
+        /* ३. कॅटेगरी मेनू / टॅब्स */
+        .nav-categories { background: #fff; border-bottom: 1px solid #ddd; overflow-x: auto; white-space: nowrap; display: flex; padding: 10px 15px; scrollbar-width: none; gap: 8px; }
+        .nav-categories::-webkit-scrollbar { display: none; }
+        .cat-btn { padding: 8px 16px; border: 1px solid #e5e7eb; background: #f3f4f6; font-weight: 600; font-family: inherit; font-size: 14px; cursor: pointer; color: #374151; border-radius: 25px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+        .cat-btn.active, .cat-btn:hover { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
+
+        /* ४. ब्रेकिंग न्यूज */
+        .breaking-container { display: flex; background: #fff; border-bottom: 2px solid var(--brand-red); align-items: stretch; }
+        .breaking-label { background: var(--brand-red); color: #fff; padding: 8px 12px; font-weight: bold; font-size: 14px; white-space: nowrap; }
+        .ticker-wrap { overflow: hidden; white-space: nowrap; padding: 8px; width: 100%; }
+        .ticker-move { display: inline-block; animation: marquee 25s linear infinite; font-weight: 600; font-size: 14px; color: #d32f2f; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* ५. बातम्यांचे कार्ड्स ग्रिड */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 15px; max-width: 1200px; margin: 0 auto; }
+        .news-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eef0f2; }
+        
+        .media-container { width: 100%; height: 200px; background: #000; position: relative; cursor: pointer; }
+        .media-container img { width: 100%; height: 100%; object-fit: cover; }
+        .media-container iframe { width: 100%; height: 100%; border: none; }
+        .video-badge { position: absolute; top: 10px; right: 10px; background: var(--brand-red); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+
+        .news-info { padding: 14px; flex-grow: 1; }
+        .news-date { font-size: 12px; color: #6b7280; margin-bottom: 8px; font-weight: 500; }
+        .news-info h3 { margin: 0; font-size: 16px; line-height: 1.5; color: #111; font-weight: 700; cursor: pointer; }
+        .news-info h3:hover { color: var(--brand-red); }
+
+        .btn-group { display: flex; border-top: 1px solid #eee; }
+        .btn-action { flex: 1; padding: 10px 5px; text-align: center; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-read { background: #f0f4ff; color: var(--brand-blue); border-right: 1px solid #eee; }
+        .btn-read:hover { background: var(--brand-blue); color: #fff; }
+        .btn-share { background: #e8f9ee; color: #1e7e34; }
+        .btn-share:hover { background: var(--wa-green); color: #fff; }
+
+        /* ६. मोडल / फुल न्यूज पॉप-अप */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+        .modal-box { background: #fff; width: 100%; max-width: 700px; max-height: 90vh; border-radius: 10px; overflow-y: auto; position: relative; padding: 20px; }
+        .modal-close { position: absolute; top: 12px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; background: transparent; color: #555; }
+        .modal-body img { max-width: 100%; height: auto; border-radius: 6px; margin: 10px 0; }
+        .modal-body { font-size: 16px; line-height: 1.8; color: #333; margin-top: 15px; }
+
+        /* ७. फुटर */
+        .footer { background: #1a1a1a; color: #ffffff; text-align: center; padding: 25px 15px; margin-top: 40px; font-size: 14px; border-top: 3px solid var(--brand-yellow); }
+        .footer a { color: #ffffff; text-decoration: none; margin: 0 8px; font-size: 13px; }
+        .dev-name { color: var(--brand-yellow); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div id="live-date">...</div>
+    <div class="top-right">
+        <div class="visitor-badge">👁️ वाचक: <span id="visitor-count" style="color:var(--brand-red);">...</span></div>
+        <div class="clock-box" id="live-clock">00:00:00</div>
+    </div>
+</div>
+
+<div class="header-main">
+    <h1 class="channel-name">धाराशिव बुलेटिन</h1>
+    <div class="sub-tagline">स्पंदन जनतेचे | विश्वसनीय मराठी बातम्या</div>
+    <div class="header-actions">
+        <a href="https://www.youtube.com/@DharashivBulletin?sub_confirmation=1" target="_blank" class="btn-yt">
+            🔴 YouTube वर सबस्क्राईब करा
+        </a>
+    </div>
+</div>
+
+<!-- कॅटेगरी फिल्टर्स -->
+<div class="nav-categories">
+    <button class="cat-btn active" onclick="filterPosts('all', this)">🏠 सर्व बातम्या</button>
+    <button class="cat-btn" onclick="filterPosts('राजकारण', this)">⚖️ राजकारण</button>
+    <button class="cat-btn" onclick="filterPosts('गुन्हेगारी', this)">🚔 गुन्हेगारी</button>
+    <button class="cat-btn" onclick="filterPosts('शिक्षण', this)">🎓 शिक्षण</button>
+    <button class="cat-btn" onclick="filterPosts('शेती', this)">🌾 शेती</button>
+    <button class="cat-btn" onclick="filterPosts('क्रीडा', this)">🏏 क्रीडा</button>
+    <button class="cat-btn" onclick="filterPosts('देश-विदेश', this)">🌍 देश-विदेश</button>
+</div>
+
+<div class="breaking-container">
+    <div class="breaking-label">ब्रेकिंग न्यूज 📢</div>
+    <div class="ticker-wrap"><div class="ticker-move" id="ticker-content">ताज्या घडामोडी लोड होत आहेत...</div></div>
+</div>
+
+<div id="news-container" class="news-grid">
+    <p style="text-align:center; padding:50px; grid-column: 1/-1;">बातम्या लोड होत आहेत...</p>
+</div>
+
+<!-- बातमी वाचण्यासाठी पॉप-अप मोडल -->
+<div id="newsModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2 id="modalTitle" style="color:var(--brand-red); font-size:22px; line-height:1.4; margin-top:10px;"></h2>
+        <div id="modalDate" style="font-size:12px; color:#888; margin-bottom:10px;"></div>
+        <div id="modalBody" class="modal-body"></div>
+        <div id="modalShareSection" style="margin-top:20px; text-align:center;"></div>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<!-- Footer Section -->
+<footer class="footer">
+  <div style="margin-bottom: 12px;">
+    <a href="about.html">About Us</a> |
+    <a href="contact.html">Contact Us</a> |
+    <a href="privacy-policy.html">Privacy Policy</a> |
+    <a href="disclaimer.html">Disclaimer</a> |
+    <a href="terms.html">Terms & Conditions</a> |
+    <a href="grievance.html" style="color: #ffcc00; font-weight: bold;">Grievance</a>
+  </div>
+  <p style="margin: 5px 0; color: #ccc;">© 2026 धाराशिव बुलेटिन | सर्व हक्क राखीव</p>
+</footer>
+    
+
+<script>
+    let allPosts = [];
+
+    // १. लाईव्ह घड्याळ आणि तारीख
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+        document.getElementById('live-date').innerText = now.toLocaleDateString('mr-IN', options);
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-GB');
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // २. व्हिजिटर काऊंट
+    function updateVisitorCount() {
+        fetch('https://api.counterapi.dev/v1/dharashiv-bulletin/visits/up')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.count) {
+                    document.getElementById('visitor-count').innerText = data.count.toLocaleString('mr-IN');
+                }
+            })
+            .catch(() => {
+                document.getElementById('visitor-count').innerText = "१,४००+";
+            });
+    }
+    updateVisitorCount();
+
+    // ३. ब्लॉगर कडून डेटा आणणे
+    const BLOG_URL = "https://dharashivbulletin.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50&callback=renderData";
+    
+    function fetchNews() {
+        const oldScript = document.getElementById('news-script');
+        if (oldScript) oldScript.remove();
+        const s = document.createElement("script");
+        s.id = 'news-script';
+        s.src = BLOG_URL;
+        document.body.appendChild(s);
+    }
+
+    function renderData(json) {
+        if (!json.feed.entry) return;
+        allPosts = json.feed.entry;
+
+        // ब्रेकिंग टिकर
+        let tickerText = "";
+        allPosts.slice(0, 6).forEach(e => { tickerText += "  •  " + e.title.$t + "  "; });
+        document.getElementById('ticker-content').innerText = tickerText;
+
+        displayPosts(allPosts);
+        checkUrlForPost();
+    }
+
+    // ४. बातमीचा ID काढणे
+    function getPostId(post) {
+        const fullId = post.id.$t;
+        return fullId.split("post-")[1] || fullId;
+    }
+
+    // ५. बातम्यांचे कार्ड्स दाखवणे
+    function displayPosts(posts) {
+        let html = "";
+        if(posts.length === 0) {
+            document.getElementById('news-container').innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:40px;'>या कॅटेगरीमध्ये सध्या कोणतीही बातमी उपलब्ध नाही.</p>";
+            return;
+        }
+
+        posts.forEach((post, index) => {
+            const title = post.title.$t;
+            const postId = getPostId(post);
+            const sitePostUrl = window.location.origin + window.location.pathname + "?id=" + postId;
+            const content = post.content ? post.content.$t : (post.summary ? post.summary.$t : "");
+            const pubDate = new Date(post.published.$t).toLocaleDateString('mr-IN', { day:'numeric', month:'short', year:'numeric' });
+
+            let videoId = "";
+            const ytMatch = content.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+            if (ytMatch) videoId = ytMatch[1];
+
+            let mediaHtml = "";
+            if (videoId) {
+                mediaHtml = `<div class="media-container"><span class="video-badge">VIDEO 🎥</span><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>`;
+            } else {
+                let img = post.media$thumbnail ? post.media$thumbnail.url.replace("s72-c", "s1600") : "https://via.placeholder.com/400x220/d32f2f/ffffff?text=Dharashiv+Bulletin";
+                mediaHtml = `<div class="media-container" onclick="openModal(${index})"><img src="${img}" alt="News Image"></div>`;
+            }
+
+            const waText = encodeURIComponent(`🚨 *${title}*\n\nबातमी वाचण्यासाठी खालील लिंकवर क्लिक करा:\n${sitePostUrl}`);
+
+            html += `
+            <div class="news-card">
+                ${mediaHtml}
+                <div class="news-info">
+                    <div class="news-date">📅 आजची बातमी (${pubDate})</div>
+                    <h3 onclick="openModal(${index})">${title}</h3>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-action btn-read" onclick="openModal(${index})">📖 सविस्तर</button>
+                    <a class="btn-action btn-share" href="https://api.whatsapp.com/send?text=${waText}" target="_blank">📲 शेअर</a>
+                </div>
+            </div>`;
+        });
+        document.getElementById('news-container').innerHTML = html;
+    }
+
+    // ६. मोडल (पॉप-अप) उघडणे
+    window.openModal = function(index) {
+        const post = allPosts[index];
+        if (!post) return;
+        
+        const postId = getPostId(post);
+        const newUrl = window.location.origin + window.location.pathname + "?id=" + postId;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+
+        document.getElementById('modalTitle').innerText = post.title.$t;
+        const pubDate = new Date(post.published.$t).toLocaleDateString('mr-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+        document.getElementById('modalDate').innerText = "प्रसिद्ध: " + pubDate;
+        document.getElementById('modalBody').innerHTML = post.content ? post.content.$t : "मजकूर उपलब्ध नाही.";
+        
+        const waText = encodeURIComponent(`🚨 *${post.title.$t}*\n\nबातमी वाचण्यासाठी खालील लिंकवर क्लिक करा:\n${newUrl}`);
+        document.getElementById('modalShareSection').innerHTML = `
+            <a href="https://api.whatsapp.com/send?text=${waText}" target="_blank" style="background:#25D366; color:#fff; padding:10px 20px; border-radius:50px; text-decoration:none; font-weight:bold; display:inline-block;">
+                📲 ही बातमी WhatsApp वर शेअर करा
+            </a>
+        `;
+
+        document.getElementById('newsModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeModal = function(e) {
+        document.getElementById('newsModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.pushState({ path: cleanUrl }, '', cleanUrl);
+    };
+
+    // ७. लिंकवरून थेट बातमी उघडणे
+    function checkUrlForPost() {
+        const params = new URLSearchParams(window.location.search);
+        const targetId = params.get('id');
+        if (targetId) {
+            const postIndex = allPosts.findIndex(p => getPostId(p) === targetId);
+            if (postIndex !== -1) {
+                openModal(postIndex);
+            }
+        }
+    }
+
+    // ८. कॅटेगरी फिल्टर
+    window.filterPosts = function(category, btn) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (category === 'all') {
+            displayPosts(allPosts);
+        } else {
+            const filtered = allPosts.filter(post => {
+                if (!post.category) return false;
+                return post.category.some(cat => cat.term.toLowerCase().includes(category.toLowerCase()));
+            });
+            displayPosts(filtered);
+        }
+    };
+
+    fetchNews();
+    setInterval(fetchNews, 60000);
+</script>
+
+</body>
+</html>
