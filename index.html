@@ -61,7 +61,7 @@
         }
         .clock-box { background: #000; color: #fff; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 13px; white-space: nowrap; }
 
-        /* २. स्लाईड-आउट हॅम्बर्गर मेनू (BBC Look) */
+        /* २. स्लाईड मेनू */
         .side-drawer {
             position: fixed;
             top: 0;
@@ -125,7 +125,7 @@
         }
         .drawer-overlay.show { display: block; }
 
-        /* ३. मुख्य हेडर व ब्रँडिंग */
+        /* ३. मुख्य हेडर */
         .header-main { background: #fff; padding: 20px 15px; text-align: center; border-bottom: 1px solid #eee; }
         .channel-name { font-size: 34px; margin: 0; font-weight: 800; }
         .sub-tagline { font-size: 13px; color: #555; margin: 6px 0 12px; font-weight: 600; }
@@ -218,10 +218,10 @@
 </head>
 <body>
 
-<!-- काळा ओव्हरले (स्लाईड मेनूसाठी) -->
+<!-- काळा ओव्हरले -->
 <div id="drawer-overlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
 
-<!-- डाव्या बाजूचा स्लाईड मेनू (BBC Look) -->
+<!-- डाव्या बाजूचा स्लाईड मेनू -->
 <div id="side-drawer" class="side-drawer">
   <div class="drawer-header">
     <span style="font-weight: bold; font-size: 16px;">धाराशिव बुलेटिन</span>
@@ -339,8 +339,6 @@
 
 <script>
     // १. घड्याळ आणि तारीख
-    <script>
-    // १. तारीख आणि घड्याळ
     function updateDateTime() {
         const now = new Date();
         const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
@@ -358,7 +356,7 @@
         document.getElementById('drawer-overlay').classList.toggle('show');
     }
 
-    // ३. व्हिजिटर काऊंटर
+    // ३. व्हिजिटर काऊंटर ट्रॅकर
     function updateVisitorCount() {
         const baseCount = 28450;
         let localVisits = localStorage.getItem('db_page_views');
@@ -376,16 +374,16 @@
     }
     updateVisitorCount();
 
-    // ४. Blogger थेट JSONP Feed
+    // ४. Blogger थेट JSONP डेटा हँडलर
     let allNewsData = [];
 
-    function handleBloggerFeed(json) {
+    window.handleBloggerFeed = function(json) {
         try {
-            const entries = json.feed.entry || [];
+            const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
             allNewsData = entries.map(entry => {
-                const title = entry.title.$t;
+                const title = entry.title ? entry.title.$t : '';
                 const content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
-                const pubDate = entry.published.$t;
+                const pubDate = entry.published ? entry.published.$t : new Date().toISOString();
                 
                 let link = '';
                 if (entry.link) {
@@ -410,14 +408,15 @@
             renderNews(allNewsData);
             updateTicker(allNewsData);
         } catch (e) {
+            console.error(e);
             document.getElementById('news-grid').innerHTML = '<p style="text-align:center; grid-column:1/-1;">बातम्या लोड करताना त्रुटी आली.</p>';
         }
-    }
+    };
 
     function renderNews(items) {
         const grid = document.getElementById('news-grid');
         grid.innerHTML = '';
-        if (items.length === 0) {
+        if (!items || items.length === 0) {
             grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">या वर्गवारीत कोणतीही बातमी उपलब्ध नाही.</p>';
             return;
         }
@@ -433,121 +432,4 @@
                 </div>
                 <div class="news-info">
                     <div class="news-date">📅 बातमी (${date})</div>
-                    <h3 onclick="openNewsIndex(${index})">${item.title}</h3>
-                </div>
-                <div class="btn-group">
-                    <button class="btn-action btn-read" onclick="openNewsIndex(${index})">📖 सविस्तर</button>
-                    <button class="btn-action btn-share" onclick="shareDirect('${encodeURIComponent(item.title)}', '${encodeURIComponent(item.link)}')">📲 शेअर</button>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    function updateTicker(items) {
-        const titles = items.slice(0, 6).map(i => `• ${i.title}`).join('   ');
-        const ticker = document.getElementById('ticker-content');
-        if (ticker) ticker.innerText = titles;
-    }
-
-    function filterCategory(cat, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        if (btn) btn.classList.add('active');
-        if (cat === 'all') {
-            renderNews(allNewsData);
-        } else {
-            const filtered = allNewsData.filter(i => 
-                (i.categories && i.categories.some(c => c.includes(cat))) || 
-                (i.title && i.title.includes(cat))
-            );
-            renderNews(filtered);
-        }
-    }
-
-    function drawerFilter(cat) {
-        toggleDrawer();
-        const btn = Array.from(document.querySelectorAll('.cat-btn')).find(b => b.innerText.includes(cat) || (cat === 'all' && b.innerText.includes('सर्व')));
-        filterCategory(cat, btn);
-    }
-
-    function searchFromDrawer(query) {
-        const term = query.toLowerCase().trim();
-        if (!term) {
-            renderNews(allNewsData);
-            return;
-        }
-        const filtered = allNewsData.filter(item => 
-            (item.title && item.title.toLowerCase().includes(term)) ||
-            (item.content && item.content.toLowerCase().includes(term))
-        );
-        renderNews(filtered);
-    }
-
-    let currentNewsUrl = '';
-    function openNewsIndex(index) {
-        const item = allNewsData[index];
-        let date = new Date(item.pubDate).toLocaleDateString('mr-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-        
-        currentNewsUrl = item.link || window.location.href;
-        const shareText = encodeURIComponent(`${item.title}\nवाचा सविस्तर: `);
-        const encodedUrl = encodeURIComponent(currentNewsUrl);
-
-        document.getElementById('modal-title').innerText = item.title;
-        document.getElementById('modal-date').innerText = `📅 ${date}`;
-        document.getElementById('modal-body').innerHTML = item.content;
-
-        const newsKey = 'views_' + btoa(unescape(encodeURIComponent(item.title.substring(0, 15))));
-        let currentViews = localStorage.getItem(newsKey);
-        if (!currentViews) {
-            currentViews = Math.floor(Math.random() * (850 - 350 + 1)) + 350;
-        } else {
-            currentViews = parseInt(currentViews) + 1;
-        }
-        localStorage.setItem(newsKey, currentViews);
-
-        const marathiNums = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-        const formattedViews = currentViews.toString().replace(/[0-9]/g, w => marathiNums[+w]);
-        document.getElementById('modal-views').innerText = `👁️ वाचक: ${formattedViews}`;
-
-        const imgContainer = document.getElementById('modal-image-container');
-        if (item.thumbnail && !item.thumbnail.includes('placeholder')) {
-            imgContainer.innerHTML = `<img src="${item.thumbnail}" style="width:100%; border-radius:8px; margin-bottom:15px;" alt="${item.title}">`;
-        } else {
-            imgContainer.innerHTML = '';
-        }
-
-        document.getElementById('m-wa-btn').href = `https://api.whatsapp.com/send?text=${shareText}${encodedUrl}`;
-        document.getElementById('m-fb-btn').href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-        document.getElementById('m-tg-btn').href = `https://t.me/share/url?url=${encodedUrl}&text=${shareText}`;
-
-        document.getElementById('news-modal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        document.getElementById('news-modal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-
-    function copyModalLink() {
-        navigator.clipboard.writeText(currentNewsUrl).then(() => {
-            const btn = document.getElementById('m-copy-btn');
-            btn.innerText = '✅ Copied!';
-            setTimeout(() => { btn.innerText = '📋 Copy Link'; }, 2000);
-        });
-    }
-
-    function shareDirect(title, link) {
-        const text = decodeURIComponent(title) + '\nवाचा सविस्तर: ' + decodeURIComponent(link);
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-    }
-
-    window.onclick = function(e) {
-        if (e.target == document.getElementById('news-modal')) {
-            closeModal();
-        }
-    }
-</script>
-
-<!-- Google Blogger थेट डेटा लिंक -->
-<script src="https://blogwithboys25.blogspot.com/feeds/posts/default?alt=json-in-script&callback=handleBloggerFeed&max-results=50"></script>
+                    <h3 onclick="openNewsIndex(${ind
