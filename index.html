@@ -338,6 +338,7 @@
 </footer>
 
 <script>
+    <script>
     // १. घड्याळ आणि तारीख
     function updateDateTime() {
         const now = new Date();
@@ -356,7 +357,7 @@
         document.getElementById('drawer-overlay').classList.toggle('show');
     }
 
-    // ३. व्हिजिटर काऊंटर ट्रॅकर
+    // ३. व्हिजिटर काऊंटर
     function updateVisitorCount() {
         const baseCount = 28450;
         let localVisits = localStorage.getItem('db_page_views');
@@ -374,44 +375,63 @@
     }
     updateVisitorCount();
 
-    // ४. Blogger थेट JSONP डेटा हँडलर
+    // ४. मल्टी-सर्व्हर ऑटोमॅटिक न्यूज लोडर (कधीही बंद न पडणारी सिस्टीम)
     let allNewsData = [];
 
-    window.handleBloggerFeed = function(json) {
+    async function fetchNewsData() {
+        const primaryUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://blogwithboys25.blogspot.com/feeds/posts/default?alt=json&max-results=50');
+        const fallbackUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent('https://blogwithboys25.blogspot.com/feeds/posts/default?alt=json&max-results=50');
+
         try {
-            const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
-            allNewsData = entries.map(entry => {
-                const title = entry.title ? entry.title.$t : '';
-                const content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
-                const pubDate = entry.published ? entry.published.$t : new Date().toISOString();
-                
-                let link = '';
-                if (entry.link) {
-                    const alternateLink = entry.link.find(l => l.rel === 'alternate');
-                    if (alternateLink) link = alternateLink.href;
-                }
-
-                let thumbnail = '';
-                if (entry.media$thumbnail) {
-                    thumbnail = entry.media$thumbnail.url.replace('/s72-c/', '/w640-h360-c/');
-                } else {
-                    const div = document.createElement('div');
-                    div.innerHTML = content;
-                    const img = div.querySelector('img');
-                    thumbnail = img ? img.src : 'https://via.placeholder.com/400x220?text=Dharashiv+Bulletin';
-                }
-
-                const categories = entry.category ? entry.category.map(c => c.term) : [];
-                return { title, content, pubDate, link, thumbnail, categories };
-            });
-
-            renderNews(allNewsData);
-            updateTicker(allNewsData);
-        } catch (e) {
-            console.error(e);
-            document.getElementById('news-grid').innerHTML = '<p style="text-align:center; grid-column:1/-1;">बातम्या लोड करताना त्रुटी आली.</p>';
+            let res = await fetch(primaryUrl);
+            if (!res.ok) throw new Error('Primary failed');
+            let json = await res.json();
+            parseBloggerJson(json);
+        } catch (e1) {
+            try {
+                let res2 = await fetch(fallbackUrl);
+                let json2 = await res2.json();
+                parseBloggerJson(json2);
+            } catch (e2) {
+                console.error("All fetch failed", e2);
+                document.getElementById('news-grid').innerHTML = '<p style="text-align:center; grid-column:1/-1; color:red;">बातम्या लोड करताना त्रुटी आली. कृपया थोड्या वेळाने रिफ्रेश करा.</p>';
+            }
         }
-    };
+    }
+
+    function parseBloggerJson(json) {
+        if (typeof json === 'string') {
+            try { json = JSON.parse(json); } catch(e){}
+        }
+        const entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
+        allNewsData = entries.map(entry => {
+            const title = entry.title ? entry.title.$t : '';
+            const content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
+            const pubDate = entry.published ? entry.published.$t : new Date().toISOString();
+            
+            let link = '';
+            if (entry.link) {
+                const alternateLink = entry.link.find(l => l.rel === 'alternate');
+                if (alternateLink) link = alternateLink.href;
+            }
+
+            let thumbnail = '';
+            if (entry.media$thumbnail) {
+                thumbnail = entry.media$thumbnail.url.replace('/s72-c/', '/w640-h360-c/');
+            } else {
+                const div = document.createElement('div');
+                div.innerHTML = content;
+                const img = div.querySelector('img');
+                thumbnail = img ? img.src : 'https://via.placeholder.com/400x220?text=Dharashiv+Bulletin';
+            }
+
+            const categories = entry.category ? entry.category.map(c => c.term) : [];
+            return { title, content, pubDate, link, thumbnail, categories };
+        });
+
+        renderNews(allNewsData);
+        updateTicker(allNewsData);
+    }
 
     function renderNews(items) {
         const grid = document.getElementById('news-grid');
@@ -432,4 +452,126 @@
                 </div>
                 <div class="news-info">
                     <div class="news-date">📅 बातमी (${date})</div>
-                    <h3 onclick="openNewsIndex(${ind
+                    <h3 onclick="openNewsIndex(${index})">${item.title}</h3>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-action btn-read" onclick="openNewsIndex(${index})">📖 सविस्तर</button>
+                    <button class="btn-action btn-share" onclick="shareDirect('${encodeURIComponent(item.title)}', '${encodeURIComponent(item.link)}')">📲 शेअर</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function updateTicker(items) {
+        if (!items || items.length === 0) return;
+        const titles = items.slice(0, 6).map(i => `• ${i.title}`).join('   ');
+        const ticker = document.getElementById('ticker-content');
+        if (ticker) ticker.innerText = titles;
+    }
+
+    function filterCategory(cat, btn) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        if (cat === 'all') {
+            renderNews(allNewsData);
+        } else {
+            const filtered = allNewsData.filter(i => 
+                (i.categories && i.categories.some(c => c.includes(cat))) || 
+                (i.title && i.title.includes(cat))
+            );
+            renderNews(filtered);
+        }
+    }
+
+    function drawerFilter(cat) {
+        toggleDrawer();
+        const btn = Array.from(document.querySelectorAll('.cat-btn')).find(b => b.innerText.includes(cat) || (cat === 'all' && b.innerText.includes('सर्व')));
+        filterCategory(cat, btn);
+    }
+
+    function searchFromDrawer(query) {
+        const term = query.toLowerCase().trim();
+        if (!term) {
+            renderNews(allNewsData);
+            return;
+        }
+        const filtered = allNewsData.filter(item => 
+            (item.title && item.title.toLowerCase().includes(term)) ||
+            (item.content && item.content.toLowerCase().includes(term))
+        );
+        renderNews(filtered);
+    }
+
+    // ५. बातमी पॉप-अप व शेअर
+    let currentNewsUrl = '';
+    function openNewsIndex(index) {
+        const item = allNewsData[index];
+        let date = new Date(item.pubDate).toLocaleDateString('mr-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        
+        currentNewsUrl = item.link || window.location.href;
+        const shareText = encodeURIComponent(`${item.title}\nवाचा सविस्तर: `);
+        const encodedUrl = encodeURIComponent(currentNewsUrl);
+
+        document.getElementById('modal-title').innerText = item.title;
+        document.getElementById('modal-date').innerText = `📅 ${date}`;
+        document.getElementById('modal-body').innerHTML = item.content;
+
+        const newsKey = 'views_' + btoa(unescape(encodeURIComponent(item.title.substring(0, 15))));
+        let currentViews = localStorage.getItem(newsKey);
+        if (!currentViews) {
+            currentViews = Math.floor(Math.random() * (850 - 350 + 1)) + 350;
+        } else {
+            currentViews = parseInt(currentViews) + 1;
+        }
+        localStorage.setItem(newsKey, currentViews);
+
+        const marathiNums = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        const formattedViews = currentViews.toString().replace(/[0-9]/g, w => marathiNums[+w]);
+        document.getElementById('modal-views').innerText = `👁️ वाचक: ${formattedViews}`;
+
+        const imgContainer = document.getElementById('modal-image-container');
+        if (item.thumbnail && !item.thumbnail.includes('placeholder')) {
+            imgContainer.innerHTML = `<img src="${item.thumbnail}" style="width:100%; border-radius:8px; margin-bottom:15px;" alt="${item.title}">`;
+        } else {
+            imgContainer.innerHTML = '';
+        }
+
+        document.getElementById('m-wa-btn').href = `https://api.whatsapp.com/send?text=${shareText}${encodedUrl}`;
+        document.getElementById('m-fb-btn').href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        document.getElementById('m-tg-btn').href = `https://t.me/share/url?url=${encodedUrl}&text=${shareText}`;
+
+        document.getElementById('news-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('news-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function copyModalLink() {
+        navigator.clipboard.writeText(currentNewsUrl).then(() => {
+            const btn = document.getElementById('m-copy-btn');
+            btn.innerText = '✅ Copied!';
+            setTimeout(() => { btn.innerText = '📋 Copy Link'; }, 2000);
+        });
+    }
+
+    function shareDirect(title, link) {
+        const text = decodeURIComponent(title) + '\nवाचा सविस्तर: ' + decodeURIComponent(link);
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    window.onclick = function(e) {
+        if (e.target == document.getElementById('news-modal')) {
+            closeModal();
+        }
+    }
+
+    // बातमी डेटा कॉल करणे
+    fetchNewsData();
+</script>
+
+</body>
+</html>
