@@ -175,21 +175,23 @@
     }
     updateVisitorCount();
 
-    // ३. ब्लॉगर कडून डेटा आणणे
-    const BLOG_URL = "https://dharashivbulletin.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50&callback=renderData";
     
-    function fetchNews() {
-        const oldScript = document.getElementById('news-script');
-        if (oldScript) oldScript.remove();
-        const s = document.createElement("script");
-        s.id = 'news-script';
-        s.src = BLOG_URL;
-        document.body.appendChild(s);
-    }
+    // ४. ब्लॉग वरून डेटा आणणे
+const BLOG_URL = "https://news.dharashivbulletin.in/feeds/posts/default?alt=json-in-script&max-results=50&callback=renderData";
 
-    function renderData(json) {
-        if (!json.feed.entry) return;
-        allPosts = json.feed.entry;
+function fetchNews() {
+  const oldScript = document.getElementById('news-script');
+  if (oldScript) oldScript.remove();
+  const s = document.createElement('script');
+  s.id = 'news-script';
+  s.src = BLOG_URL;
+  document.body.appendChild(s);
+}
+
+function renderData(json) {
+  if (!json.feed.entry) return;
+  allPosts = json.feed.entry;
+    
 
         // ब्रेकिंग टिकर
         let tickerText = "";
