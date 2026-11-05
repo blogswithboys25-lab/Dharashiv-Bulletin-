@@ -4,23 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>धाराशिव बुलेटिन - स्पंदन जनतेचे</title>
-    <meta name="description" content="धाराशिव बुलेटिन - विश्वसनीय मराठी बातम्या">
-    <meta property="og:site_name" content="धाराशिव बुलेटिन">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="धाराशिव बुलेटिन - स्पंदन जनतेचे">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Marathi:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Google AdSense Code -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6115119511519503" crossorigin="anonymous"></script>
+    
 
     <style>
-        :root {
-            --brand-yellow: #ffcc00;
-            --brand-red: #d32f2f;
+        :root { 
+            --brand-yellow: #ffcc00; 
+            --brand-red: #d32f2f; 
             --brand-blue: #0d6efd;
-            --wa-green: #25D366;
+            --wa-green: #25D366; 
             --yt-red: #FF0000;
-            --bg-gray: #f4f5f7;
+            --bg-gray: #f8f9fa;
         }
         * { box-sizing: border-box; }
         body { font-family: 'Noto Sans Marathi', sans-serif; margin: 0; background: var(--bg-gray); color: #212529; }
@@ -33,13 +30,12 @@
 
         /* २. हेडर */
         .header-main { background: #fff; padding: 20px 15px; text-align: center; border-bottom: 1px solid #eee; }
-        .header-main a.home-link { text-decoration: none; }
         .channel-name { font-size: 32px; color: var(--brand-red); font-weight: 700; margin: 0; }
         .sub-tagline { font-size: 13px; color: #666; margin: 4px 0 12px; }
         .header-actions { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; }
         .btn-yt { background: var(--yt-red); color: #fff; padding: 8px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; box-shadow: 0 3px 10px rgba(255,0,0,0.2); }
 
-        /* ३. कॅटेगरी मेनू */
+        /* ३. कॅटेगरी मेनू / टॅब्स */
         .nav-categories { background: #fff; border-bottom: 1px solid #ddd; overflow-x: auto; white-space: nowrap; display: flex; padding: 10px 15px; scrollbar-width: none; gap: 8px; }
         .nav-categories::-webkit-scrollbar { display: none; }
         .cat-btn { padding: 8px 16px; border: 1px solid #e5e7eb; background: #f3f4f6; font-weight: 600; font-family: inherit; font-size: 14px; cursor: pointer; color: #374151; border-radius: 25px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
@@ -52,21 +48,20 @@
         .ticker-move { display: inline-block; animation: marquee 25s linear infinite; font-weight: 600; font-size: 14px; color: #d32f2f; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* ५. बातम्यांचे कार्ड्स */
+        /* ५. बातम्यांचे कार्ड्स ग्रिड */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 15px; max-width: 1200px; margin: 0 auto; }
-        .news-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eef0f2; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .news-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-        .media-container { display: block; width: 100%; height: 200px; background: #000; position: relative; cursor: pointer; }
-        .media-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .news-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eef0f2; }
+        
+        .media-container { width: 100%; height: 200px; background: #000; position: relative; cursor: pointer; }
+        .media-container img { width: 100%; height: 100%; object-fit: cover; }
+        .media-container iframe { width: 100%; height: 100%; border: none; }
         .video-badge { position: absolute; top: 10px; right: 10px; background: var(--brand-red); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,0.55); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; padding-left: 4px; }
+
         .news-info { padding: 14px; flex-grow: 1; }
-        .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-        .news-cat { background: #fdecea; color: var(--brand-red); padding: 1px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; }
-        .news-date { font-size: 12px; color: #6b7280; font-weight: 500; }
-        .news-info h3 { margin: 0; font-size: 16px; line-height: 1.5; color: #111; font-weight: 700; }
-        .news-info h3 a { color: inherit; text-decoration: none; }
-        .news-info h3 a:hover { color: var(--brand-red); }
+        .news-date { font-size: 12px; color: #6b7280; margin-bottom: 8px; font-weight: 500; }
+        .news-info h3 { margin: 0; font-size: 16px; line-height: 1.5; color: #111; font-weight: 700; cursor: pointer; }
+        .news-info h3:hover { color: var(--brand-red); }
+
         .btn-group { display: flex; border-top: 1px solid #eee; }
         .btn-action { flex: 1; padding: 10px 5px; text-align: center; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-read { background: #f0f4ff; color: var(--brand-blue); border-right: 1px solid #eee; }
@@ -74,55 +69,17 @@
         .btn-share { background: #e8f9ee; color: #1e7e34; }
         .btn-share:hover { background: var(--wa-green); color: #fff; }
 
-        /* ६. पूर्ण बातमी पेज */
-        #articleView { display: none; }
-        .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
-        @media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); } }
-        .back-btn { display: inline-block; margin-bottom: 12px; color: var(--brand-blue); font-weight: 600; font-size: 14px; text-decoration: none; }
-        .back-btn:hover { text-decoration: underline; }
-        .article { background: #fff; border-radius: 12px; padding: 26px; border: 1px solid #eef0f2; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        @media (max-width: 600px) { .article { padding: 16px; } }
-        .meta-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 13px; color: #6b7280; }
-        .chip { background: var(--brand-red); color: #fff; padding: 3px 12px; border-radius: 50px; font-weight: 700; font-size: 12px; }
-        .article h1 { font-size: 30px; line-height: 1.5; margin: 14px 0 6px; color: #111; font-weight: 700; }
-        @media (max-width: 600px) { .article h1 { font-size: 22px; } }
-        .byline { font-size: 13px; color: #6b7280; padding-bottom: 14px; border-bottom: 1px solid #eee; }
-        .hero { width: 100%; max-height: 480px; object-fit: cover; border-radius: 10px; margin: 16px 0 4px; display: block; background: #eee; }
-        .article-body { font-size: 18px; line-height: 1.95; color: #2b2b2b; margin-top: 16px; overflow-wrap: anywhere; }
-        .article-body p { margin: 0 0 16px; }
-        .article-body img { max-width: 100%; height: auto !important; border-radius: 8px; display: block; margin: 14px auto; }
-        .article-body iframe { max-width: 100%; border: 0; }
-        .article-body iframe[src*="youtube"], .article-body iframe[src*="youtu.be"] { width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; border-radius: 8px; }
-        .article-body a { color: var(--brand-blue); }
-        .article-body table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
-        .article-body td, .article-body th { border: 1px solid #ddd; padding: 6px 10px; }
-        .article-body blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid var(--brand-yellow); background: #fffbea; }
-
-        .share-box { margin-top: 28px; padding-top: 18px; border-top: 1px solid #eee; }
-        .share-title { font-weight: 700; margin-bottom: 10px; font-size: 15px; }
-        .share-btns { display: flex; flex-wrap: wrap; gap: 10px; }
-        .share-btn { border: none; cursor: pointer; font-family: inherit; padding: 10px 18px; border-radius: 50px; font-weight: 700; font-size: 14px; color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-        .s-wa { background: var(--wa-green); }
-        .s-fb { background: #1877f2; }
-        .s-tg { background: #229ed9; }
-        .s-copy { background: #374151; }
-
-        .side-card { background: #fff; border-radius: 12px; padding: 16px; border: 1px solid #eef0f2; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .side-title { font-size: 18px; font-weight: 700; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 3px solid var(--brand-red); display: inline-block; }
-        .rel-item { display: flex; gap: 12px; text-decoration: none; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-        .rel-item:last-child { border-bottom: none; }
-        .rel-item img { width: 92px; height: 68px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }
-        .rel-item span { font-size: 14px; font-weight: 600; line-height: 1.5; color: #111; }
-        .rel-item:hover span { color: var(--brand-red); }
-
-        .skeleton div { background: linear-gradient(90deg, #eee 25%, #f7f7f7 50%, #eee 75%); background-size: 200% 100%; animation: shine 1.2s infinite; border-radius: 6px; margin-bottom: 12px; }
-        @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .error-box { text-align: center; padding: 50px 15px; }
-        .error-box a { display: inline-block; margin-top: 14px; background: var(--brand-red); color: #fff; padding: 10px 22px; border-radius: 50px; text-decoration: none; font-weight: 700; }
+        /* ६. मोडल / फुल न्यूज पॉप-अप */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+        .modal-box { background: #fff; width: 100%; max-width: 700px; max-height: 90vh; border-radius: 10px; overflow-y: auto; position: relative; padding: 20px; }
+        .modal-close { position: absolute; top: 12px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; background: transparent; color: #555; }
+        .modal-body img { max-width: 100%; height: auto; border-radius: 6px; margin: 10px 0; }
+        .modal-body { font-size: 16px; line-height: 1.8; color: #333; margin-top: 15px; }
 
         /* ७. फुटर */
         .footer { background: #1a1a1a; color: #ffffff; text-align: center; padding: 25px 15px; margin-top: 40px; font-size: 14px; border-top: 3px solid var(--brand-yellow); }
         .footer a { color: #ffffff; text-decoration: none; margin: 0 8px; font-size: 13px; }
+        .dev-name { color: var(--brand-yellow); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -136,10 +93,10 @@
 </div>
 
 <div class="header-main">
-    <a href="?" data-nav class="home-link"><h1 class="channel-name">धाराशिव बुलेटिन</h1></a>
+    <h1 class="channel-name">धाराशिव बुलेटिन</h1>
     <div class="sub-tagline">स्पंदन जनतेचे | विश्वसनीय मराठी बातम्या</div>
     <div class="header-actions">
-        <a href="https://www.youtube.com/@DharashivBulletin?sub_confirmation=1" target="_blank" rel="noopener" class="btn-yt">
+        <a href="https://www.youtube.com/@DharashivBulletin?sub_confirmation=1" target="_blank" class="btn-yt">
             🔴 YouTube वर सबस्क्राईब करा
         </a>
     </div>
@@ -161,100 +118,40 @@
     <div class="ticker-wrap"><div class="ticker-move" id="ticker-content">ताज्या घडामोडी लोड होत आहेत...</div></div>
 </div>
 
-<!-- यादी (होम) -->
-<div id="listView">
-    <div id="news-container" class="news-grid">
-        <p style="text-align:center; padding:50px; grid-column: 1/-1;">बातम्या लोड होत आहेत...</p>
+<div id="news-container" class="news-grid">
+    <p style="text-align:center; padding:50px; grid-column: 1/-1;">बातम्या लोड होत आहेत...</p>
+</div>
+
+<!-- बातमी वाचण्यासाठी पॉप-अप मोडल -->
+<div id="newsModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2 id="modalTitle" style="color:var(--brand-red); font-size:22px; line-height:1.4; margin-top:10px;"></h2>
+        <div id="modalDate" style="font-size:12px; color:#888; margin-bottom:10px;"></div>
+        <div id="modalBody" class="modal-body"></div>
+        <div id="modalShareSection" style="margin-top:20px; text-align:center;"></div>
     </div>
 </div>
 
-<!-- पूर्ण बातमी -->
-<div id="articleView">
-    <div class="wrap">
-        <main>
-            <a href="?" data-nav class="back-btn">← सर्व बातम्या</a>
-            <article class="article" id="article"></article>
-        </main>
-        <aside>
-            <div class="side-card">
-                <h2 class="side-title">📰 संबंधित बातम्या</h2>
-                <div id="related"><p style="font-size:14px; color:#777;">लोड होत आहे...</p></div>
-            </div>
-        </aside>
-    </div>
-</div>
-
+<!-- Footer Section -->
+<!-- Footer Section -->
 <footer class="footer">
-    <div style="margin-bottom: 12px;">
-        <a href="about.html">About Us</a> |
-        <a href="contact.html">Contact Us</a> |
-        <a href="privacy-policy.html">Privacy Policy</a> |
-        <a href="disclaimer.html">Disclaimer</a> |
-        <a href="terms.html">Terms & Conditions</a> |
-        <a href="grievance.html" style="color: #ffcc00; font-weight: bold;">Grievance</a>
-    </div>
-    <p style="margin: 5px 0; color: #ccc;">© 2026 धाराशिव बुलेटिन | सर्व हक्क राखीव</p>
+  <div style="margin-bottom: 12px;">
+    <a href="about.html">About Us</a> |
+    <a href="contact.html">Contact Us</a> |
+    <a href="privacy-policy.html">Privacy Policy</a> |
+    <a href="disclaimer.html">Disclaimer</a> |
+    <a href="terms.html">Terms & Conditions</a> |
+    <a href="grievance.html" style="color: #ffcc00; font-weight: bold;">Grievance</a>
+  </div>
+  <p style="margin: 5px 0; color: #ccc;">© 2026 धाराशिव बुलेटिन | सर्व हक्क राखीव</p>
 </footer>
+    
 
 <script>
-    const BLOG = "https://news.dharashivbulletin.in";
-    const FEED_URL = BLOG + "/feeds/posts/default?alt=json-in-script&max-results=50&callback=renderData";
-    const DEFAULT_TITLE = "धाराशिव बुलेटिन - स्पंदन जनतेचे";
-    const DEFAULT_DESC = "धाराशिव बुलेटिन - विश्वसनीय मराठी बातम्या";
-    const PLACEHOLDER = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220"><rect width="100%" height="100%" fill="#d32f2f"/><text x="50%" y="50%" fill="#fff" font-size="24" font-family="sans-serif" text-anchor="middle" dominant-baseline="middle">Dharashiv Bulletin</text></svg>');
-
     let allPosts = [];
-    let currentCategory = 'all';
-    let lastSignature = '';
-    let currentPostId = '';   // सध्या उघडलेल्या बातमीचा ID ('' = होम)
-    let renderedId = '';      // ज्या बातमीचं पेज बनलेलं आहे
 
-    /* ---------- छोटे helper ---------- */
-    function esc(s) {
-        // अक्षर कोड 38 म्हणजे "आणि" चिन्ह; असं लिहिलं की कॉपी-पेस्टमध्ये कोड बदलत नाही
-        const A = String.fromCharCode(38);
-        return String(s)
-            .replace(/[\x26]/g, A + 'amp;')
-            .replace(/</g, A + 'lt;')
-            .replace(/>/g, A + 'gt;')
-            .replace(/"/g, A + 'quot;')
-            .replace(/'/g, A + '#39;');
-    }
-    function getPostId(post) {
-        const fullId = post.id.$t;
-        return fullId.split("post-")[1] || fullId;
-    }
-    function bigImg(url, size) {
-        return String(url).replace(/^http:/, 'https:').replace(/^\/\//, 'https://')
-            .replace(/\/(s\d+|w\d+-h\d+)(-[a-z]+)?\//, '/s' + size + '/');
-    }
-    function ytIdOf(content) {
-        const m = content.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-        return m ? m[1] : '';
-    }
-    function contentOf(post) {
-        return post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
-    }
-    function thumbOf(post) {
-        if (post.media$thumbnail) return bigImg(post.media$thumbnail.url, 400);
-        const yt = ytIdOf(contentOf(post));
-        if (yt) return 'https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg';
-        return PLACEHOLDER;
-    }
-    function baseUrl() { return window.location.origin + window.location.pathname; }
-    function postUrl(id) { return baseUrl() + '?id=' + id; }
-
-    function setMeta(attr, key, val) {
-        let el = document.querySelector('meta[' + attr + '="' + key + '"]');
-        if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
-        el.setAttribute('content', val);
-    }
-    function removeMeta(attr, key) {
-        const el = document.querySelector('meta[' + attr + '="' + key + '"]');
-        if (el) el.remove();
-    }
-
-    /* ---------- घड्याळ आणि व्हिजिटर काऊंट ---------- */
+    // १. लाईव्ह घड्याळ आणि तारीख
     function updateClock() {
         const now = new Date();
         const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
@@ -263,6 +160,7 @@
     }
     setInterval(updateClock, 1000); updateClock();
 
+    // २. व्हिजिटर काऊंट
     function updateVisitorCount() {
         fetch('https://api.counterapi.dev/v1/dharashiv-bulletin/visits/up')
             .then(res => res.json())
@@ -277,60 +175,147 @@
     }
     updateVisitorCount();
 
-    /* ---------- ब्लॉगवरून बातम्या ---------- */
-    // बातम्या आल्या नाहीत तर पेजवर स्पष्ट संदेश आणि पुन्हा प्रयत्न बटण
-    function showFeedError() {
-        if (allPosts.length || currentPostId) return;
-        document.getElementById('news-container').innerHTML =
-            '<div style="grid-column:1/-1; text-align:center; padding:40px;">' +
-            '<p>⚠️ बातम्या लोड होऊ शकल्या नाहीत.</p>' +
-            '<p style="font-size:13px; color:#666;">इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.</p>' +
-            '<button onclick="fetchNews()" style="background:#d32f2f; color:#fff; border:none; padding:10px 22px; border-radius:50px; font-family:inherit; font-weight:700; cursor:pointer;">🔄 पुन्हा प्रयत्न करा</button></div>';
-    }
+    
+    // ४. ब्लॉग वरून डेटा आणणे
+const BLOG_URL = "https://news.dharashivbulletin.in/feeds/posts/default?alt=json-in-script&max-results=50&callback=renderData";
 
-    function fetchNews() {
-        const old = document.getElementById('news-script');
-        if (old) old.remove();
-        const s = document.createElement('script');
-        s.id = 'news-script';
-        s.src = FEED_URL + "&_=" + Date.now();
-        s.onerror = showFeedError;
-        document.body.appendChild(s);
-        // १२ सेकंदात बातम्या आल्या नाहीत तरी संदेश दाखवा
-        if (!allPosts.length) setTimeout(function () { if (!allPosts.length) showFeedError(); }, 12000);
-    }
+function fetchNews() {
+  const oldScript = document.getElementById('news-script');
+  if (oldScript) oldScript.remove();
+  const s = document.createElement('script');
+  s.id = 'news-script';
+  s.src = BLOG_URL;
+  document.body.appendChild(s);
+}
 
-    function renderData(json) {
-        if (!json.feed.entry) {
-            if (!allPosts.length && !currentPostId) {
-                document.getElementById('news-container').innerHTML =
-                    "<p style='grid-column:1/-1; text-align:center; padding:40px;'>सध्या कोणतीही बातमी उपलब्ध नाही.</p>";
-            }
-            return;
-        }
+function renderData(json) {
+  if (!json.feed.entry) return;
+  allPosts = json.feed.entry;
+    
 
-        // बातम्या बदलल्या नसतील तर पेज पुन्हा बनवू नका
-        const signature = json.feed.entry.map(p => p.id.$t + (p.updated ? p.updated.$t : '')).join('|');
-        if (signature === lastSignature) return;
-        lastSignature = signature;
-
-        allPosts = json.feed.entry;
-
+        // ब्रेकिंग टिकर
         let tickerText = "";
         allPosts.slice(0, 6).forEach(e => { tickerText += "  •  " + e.title.$t + "  "; });
         document.getElementById('ticker-content').innerText = tickerText;
 
-        if (currentPostId) {
-            // बातमी उघडलेली असताना: संबंधित बातम्या अपडेट करा, आणि बातमी अजून आली नसेल तर दाखवा
-            renderRelated();
-            if (renderedId !== currentPostId) {
-                const entry = allPosts.find(p => getPostId(p) === currentPostId);
-                if (entry) renderArticle(entry);
+        displayPosts(allPosts);
+        checkUrlForPost();
+    }
+
+    // ४. बातमीचा ID काढणे
+    function getPostId(post) {
+        const fullId = post.id.$t;
+        return fullId.split("post-")[1] || fullId;
+    }
+
+    // ५. बातम्यांचे कार्ड्स दाखवणे
+    function displayPosts(posts) {
+        let html = "";
+        if(posts.length === 0) {
+            document.getElementById('news-container').innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:40px;'>या कॅटेगरीमध्ये सध्या कोणतीही बातमी उपलब्ध नाही.</p>";
+            return;
+        }
+
+        posts.forEach((post, index) => {
+            const title = post.title.$t;
+            const postId = getPostId(post);
+            const sitePostUrl = window.location.origin + window.location.pathname + "?id=" + postId;
+            const content = post.content ? post.content.$t : (post.summary ? post.summary.$t : "");
+            const pubDate = new Date(post.published.$t).toLocaleDateString('mr-IN', { day:'numeric', month:'short', year:'numeric' });
+
+            let videoId = "";
+            const ytMatch = content.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+            if (ytMatch) videoId = ytMatch[1];
+
+            let mediaHtml = "";
+            if (videoId) {
+                mediaHtml = `<div class="media-container"><span class="video-badge">VIDEO 🎥</span><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>`;
+            } else {
+                let img = post.media$thumbnail ? post.media$thumbnail.url.replace("s72-c", "s1600") : "https://via.placeholder.com/400x220/d32f2f/ffffff?text=Dharashiv+Bulletin";
+                mediaHtml = `<div class="media-container" onclick="openModal(${index})"><img src="${img}" alt="News Image"></div>`;
             }
-        } else {
-            applyFilter();
+
+            const waText = encodeURIComponent(`🚨 *${title}*\n\nबातमी वाचण्यासाठी खालील लिंकवर क्लिक करा:\n${sitePostUrl}`);
+
+            html += `
+            <div class="news-card">
+                ${mediaHtml}
+                <div class="news-info">
+                    <div class="news-date">📅 आजची बातमी (${pubDate})</div>
+                    <h3 onclick="openModal(${index})">${title}</h3>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-action btn-read" onclick="openModal(${index})">📖 सविस्तर</button>
+                    <a class="btn-action btn-share" href="https://api.whatsapp.com/send?text=${waText}" target="_blank">📲 शेअर</a>
+                </div>
+            </div>`;
+        });
+        document.getElementById('news-container').innerHTML = html;
+    }
+
+    // ६. मोडल (पॉप-अप) उघडणे
+    window.openModal = function(index) {
+        const post = allPosts[index];
+        if (!post) return;
+        
+        const postId = getPostId(post);
+        const newUrl = window.location.origin + window.location.pathname + "?id=" + postId;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+
+        document.getElementById('modalTitle').innerText = post.title.$t;
+        const pubDate = new Date(post.published.$t).toLocaleDateString('mr-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+        document.getElementById('modalDate').innerText = "प्रसिद्ध: " + pubDate;
+        document.getElementById('modalBody').innerHTML = post.content ? post.content.$t : "मजकूर उपलब्ध नाही.";
+        
+        const waText = encodeURIComponent(`🚨 *${post.title.$t}*\n\nबातमी वाचण्यासाठी खालील लिंकवर क्लिक करा:\n${newUrl}`);
+        document.getElementById('modalShareSection').innerHTML = `
+            <a href="https://api.whatsapp.com/send?text=${waText}" target="_blank" style="background:#25D366; color:#fff; padding:10px 20px; border-radius:50px; text-decoration:none; font-weight:bold; display:inline-block;">
+                📲 ही बातमी WhatsApp वर शेअर करा
+            </a>
+        `;
+
+        document.getElementById('newsModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeModal = function(e) {
+        document.getElementById('newsModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.pushState({ path: cleanUrl }, '', cleanUrl);
+    };
+
+    // ७. लिंकवरून थेट बातमी उघडणे
+    function checkUrlForPost() {
+        const params = new URLSearchParams(window.location.search);
+        const targetId = params.get('id');
+        if (targetId) {
+            const postIndex = allPosts.findIndex(p => getPostId(p) === targetId);
+            if (postIndex !== -1) {
+                openModal(postIndex);
+            }
         }
     }
 
-    /* ---------- बातम्यांचे कार्ड्स ---------- */
-    function d
+    // ८. कॅटेगरी फिल्टर
+    window.filterPosts = function(category, btn) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (category === 'all') {
+            displayPosts(allPosts);
+        } else {
+            const filtered = allPosts.filter(post => {
+                if (!post.category) return false;
+                return post.category.some(cat => cat.term.toLowerCase().includes(category.toLowerCase()));
+            });
+            displayPosts(filtered);
+        }
+    };
+
+    fetchNews();
+    setInterval(fetchNews, 60000);
+</script>
+
+</body>
+</html>
