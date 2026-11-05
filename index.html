@@ -190,7 +190,7 @@
         <a href="contact.html">Contact Us</a> |
         <a href="privacy-policy.html">Privacy Policy</a> |
         <a href="disclaimer.html">Disclaimer</a> |
-        <a href="terms.html">Terms &amp; Conditions</a> |
+        <a href="terms.html">Terms & Conditions</a> |
         <a href="grievance.html" style="color: #ffcc00; font-weight: bold;">Grievance</a>
     </div>
     <p style="margin: 5px 0; color: #ccc;">© 2026 धाराशिव बुलेटिन | सर्व हक्क राखीव</p>
@@ -211,7 +211,14 @@
 
     /* ---------- छोटे helper ---------- */
     function esc(s) {
-        return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        // अक्षर कोड 38 म्हणजे "आणि" चिन्ह; असं लिहिलं की कॉपी-पेस्टमध्ये कोड बदलत नाही
+        const A = String.fromCharCode(38);
+        return String(s)
+            .replace(/[\x26]/g, A + 'amp;')
+            .replace(/</g, A + 'lt;')
+            .replace(/>/g, A + 'gt;')
+            .replace(/"/g, A + 'quot;')
+            .replace(/'/g, A + '#39;');
     }
     function getPostId(post) {
         const fullId = post.id.$t;
@@ -271,17 +278,36 @@
     updateVisitorCount();
 
     /* ---------- ब्लॉगवरून बातम्या ---------- */
+    // बातम्या आल्या नाहीत तर पेजवर स्पष्ट संदेश आणि पुन्हा प्रयत्न बटण
+    function showFeedError() {
+        if (allPosts.length || currentPostId) return;
+        document.getElementById('news-container').innerHTML =
+            '<div style="grid-column:1/-1; text-align:center; padding:40px;">' +
+            '<p>⚠️ बातम्या लोड होऊ शकल्या नाहीत.</p>' +
+            '<p style="font-size:13px; color:#666;">इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.</p>' +
+            '<button onclick="fetchNews()" style="background:#d32f2f; color:#fff; border:none; padding:10px 22px; border-radius:50px; font-family:inherit; font-weight:700; cursor:pointer;">🔄 पुन्हा प्रयत्न करा</button></div>';
+    }
+
     function fetchNews() {
         const old = document.getElementById('news-script');
         if (old) old.remove();
         const s = document.createElement('script');
         s.id = 'news-script';
         s.src = FEED_URL + "&_=" + Date.now();
+        s.onerror = showFeedError;
         document.body.appendChild(s);
+        // १२ सेकंदात बातम्या आल्या नाहीत तरी संदेश दाखवा
+        if (!allPosts.length) setTimeout(function () { if (!allPosts.length) showFeedError(); }, 12000);
     }
 
     function renderData(json) {
-        if (!json.feed.entry) return;
+        if (!json.feed.entry) {
+            if (!allPosts.length && !currentPostId) {
+                document.getElementById('news-container').innerHTML =
+                    "<p style='grid-column:1/-1; text-align:center; padding:40px;'>सध्या कोणतीही बातमी उपलब्ध नाही.</p>";
+            }
+            return;
+        }
 
         // बातम्या बदलल्या नसतील तर पेज पुन्हा बनवू नका
         const signature = json.feed.entry.map(p => p.id.$t + (p.updated ? p.updated.$t : '')).join('|');
@@ -307,29 +333,4 @@
     }
 
     /* ---------- बातम्यांचे कार्ड्स ---------- */
-    function displayPosts(posts) {
-        const box = document.getElementById('news-container');
-        if (posts.length === 0) {
-            box.innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:40px;'>या कॅटेगरीमध्ये सध्या कोणतीही बातमी उपलब्ध नाही.</p>";
-            return;
-        }
-
-        let html = "";
-        posts.forEach(post => {
-            const rawTitle = post.title.$t;
-            const title = esc(rawTitle);
-            const id = getPostId(post);
-            const link = '?id=' + id;
-            const pubDate = new Date(post.published.$t).toLocaleDateString('mr-IN', { day:'numeric', month:'short', year:'numeric' });
-            const cat = (post.category && post.category[0]) ? post.category[0].term : "";
-            const videoId = ytIdOf(contentOf(post));
-
-            let mediaHtml = "";
-            if (videoId) {
-                mediaHtml = `<a class="media-container" href="${link}" data-nav><span class="video-badge">VIDEO 🎥</span><img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="${title}" loading="lazy"><span class="play-icon">▶</span></a>`;
-            } else {
-                const img = post.media$thumbnail ? bigImg(post.media$thumbnail.url, 800) : PLACEHOLDER;
-                mediaHtml = `<a class="media-container" href="${link}" data-nav><img src="${img}" alt="${title}" loading="lazy"></a>`;
-            }
-
-            const 
+    function d
